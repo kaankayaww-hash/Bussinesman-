@@ -7,25 +7,37 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
             background-color: #121212;
             color: white;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        #game-container {
+        /* Sağ üst köşe küçük versiyon yazısı */
+        #version-tag {
+            position: fixed;
+            top: 5px;
+            right: 10px;
+            font-size: 10px;
+            color: #666;
+        }
+        .game-container {
+            width: 100%;
             max-width: 400px;
-            margin: auto;
             background: #1e1e1e;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+            text-align: center;
         }
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 8px 16px;
+            font-size: 14px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 5px;
             border: none;
             border-radius: 5px;
             background-color: #ff9800;
@@ -34,15 +46,15 @@
         button:hover {
             background-color: #e68900;
         }
-        #car-list {
-            margin-top: 20px;
-            max-height: 200px;
+        .car-list {
+            margin-top: 10px;
+            max-height: 150px;
             overflow-y: auto;
             border: 1px solid #444;
-            padding: 10px;
+            padding: 8px;
             text-align: left;
         }
-        /* Gizli sayfa tasarımı */
+        /* Gizli Mavi Buton ile Açılan Sayfa (Modal) */
         #secret-page {
             display: none;
             position: fixed;
@@ -54,62 +66,82 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            z-index: 100;
+            z-index: 1000;
+        }
+        /* Sağ üst çarpı butonu */
+        #close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: #555;
+            color: white;
+            font-size: 18px;
+            padding: 5px 12px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        #close-btn:hover {
+            background: #777;
         }
         /* Yanıp sönen kırmızı buton efekti */
         @keyframes pulse {
             0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.3; transform: scale(0.95); }
+            50% { opacity: 0.4; transform: scale(0.95); }
             100% { opacity: 1; transform: scale(1); }
         }
         #red-button {
             background-color: #ff3b30;
             color: white;
-            font-size: 22px;
-            padding: 20px 40px;
+            font-size: 18px;
+            padding: 15px 30px;
             border-radius: 50px;
             animation: pulse 1s infinite;
             border: none;
             cursor: pointer;
             font-weight: bold;
         }
+        /* Arabalar listesinin altındaki minik mavi buton */
         #blue-trigger-btn {
             background-color: #007aff;
             width: 100%;
-            margin-top: 15px;
+            margin-top: 10px;
+            padding: 6px;
+            font-size: 12px;
             text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <h1>Para: <span id="money">10000</span> $</h1>
-        <h2>Tıklama Gücü: <span id="click-power">1</span></h2>
+    <!-- Sağ üst versiyon -->
+    <div id="version-tag">v1.0</div>
+
+    <div class="game-container">
+        <h2>Para: <span id="money">10000</span> $</h2>
+        <h3>Tıklama Gücü: <span id="click-power">1</span></h3>
         <button onclick="clickMoney()">Para Kazan</button>
         
         <br><br>
         <button onclick="buyUpgrade()">Tıklama Yükseltmesi (Fiyat: <span id="upgrade-cost">50</span> $)</button>
 
         <h3>Arabalar</h3>
-        <div id="car-list">
+        <div class="car-list">
             <p>Şehir İçi Hatchback - 15.000 $</p>
             <p>Spor Sedan - 80.000 $</p>
             <p>Lüks SUV - 350.000 $</p>
             <p>Süper Araba - 2.000.000 $</p>
             <p>Hiper Araba - 10.000.000 $</p>
-            <!-- Arabalar listesinin en altındaki mavi buton -->
-            <button id="blue-trigger-btn" onclick="openSecretPage()">Özel Sayfaya Git</button>
+            <!-- Arabalar sekmesinin en aşağısındaki mavi buton -->
+            <button id="blue-trigger-btn" onclick="openSecretPage()">🔵 Gizli Alan</button>
         </div>
     </div>
 
-    <!-- Gizli Sayfa (Mavi butonla açılan) -->
+    <!-- Gizli Sayfa Ekranı -->
     <div id="secret-page">
-        <h2>Gizli 1 Milyon Dolar Odası!</h2>
-        <p>Aşağıdaki yanıp sönen kırmızı butona tıkla ve parayı kap!</p>
+        <div id="close-btn" onclick="closeSecretPage()">✕</div>
+        <h2>Gizli 1 Milyon Dolar Odası</h2>
+        <p>Her tıkladığında hesabına 1 Milyon Dolar eklenecek!</p>
         <button id="red-button" onclick="getMillionaire()">1 Milyon Dolar Al!</button>
-        <br><br>
-        <button onclick="closeSecretPage()" style="background-color: #555;">Geri Dön</button>
     </div>
 
     <script>
@@ -148,10 +180,8 @@
         }
 
         function getMillionaire() {
-            money = 1000000; // Tıklayınca 1 milyon dolar yapar
+            money += 1000000; // İstediğin kadar tıklayıp her seferinde 1 milyon ekleyebilirsin
             updateUI();
-            closeSecretPage();
-            alert("Tebrikler! Hesabına 1 Milyon Dolar eklendi!");
         }
 
         updateUI();
