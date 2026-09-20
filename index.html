@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pistachio Tycoon - Para İmparatorluğu</title>
+    <title>Pistachio Tycoon - Ultimate Sürüm</title>
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +20,6 @@
             overflow: hidden;
             position: relative;
         }
-        /* Sağ üst köşe minik versiyon yazısı */
         #version-tag {
             position: fixed;
             top: 5px;
@@ -32,7 +31,7 @@
         }
         header {
             background: #1e293b;
-            padding: 15px 25px;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -41,13 +40,14 @@
         }
         .stats-container {
             display: flex;
-            gap: 25px;
+            gap: 15px;
         }
         .stat-box {
             background: #0f172a;
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: 8px;
             border: 1px solid #475569;
+            font-size: 13px;
         }
         .stat-box span {
             color: #38bdf8;
@@ -59,21 +59,21 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
             position: relative;
         }
         .clicker-section {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         #big-click-btn {
             background: linear-gradient(135deg, #22c55e, #15803d);
             color: white;
             border: none;
-            width: 220px;
-            height: 220px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
@@ -81,23 +81,24 @@
         }
         #big-click-btn:active {
             transform: scale(0.93);
-            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
         }
         nav {
             background: #1e293b;
             display: flex;
             justify-content: space-around;
-            padding: 12px;
+            padding: 10px;
             border-top: 2px solid #334155;
+            flex-wrap: wrap;
         }
         .tab-btn {
             background: #334155;
             color: white;
             border: none;
-            padding: 10px 18px;
+            padding: 8px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 12px;
             transition: background 0.2s;
         }
         .tab-btn.active, .tab-btn:hover {
@@ -107,10 +108,10 @@
             display: none;
             width: 100%;
             max-width: 700px;
-            height: 320px;
+            height: 300px;
             background: #1e293b;
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px;
             overflow-y: auto;
             border: 1px solid #475569;
         }
@@ -119,31 +120,32 @@
         }
         .item-card {
             background: #0f172a;
-            padding: 12px 15px;
+            padding: 10px 14px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid #334155;
+            font-size: 14px;
         }
         .item-card button {
             background: #22c55e;
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 6px 10px;
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 12px;
         }
         .item-card button:hover {
             background: #16a34a;
         }
-        /* Arabalar sekmesinin en altındaki minik mavi buton */
         #blue-trigger-btn {
             background-color: #007aff;
             width: 100%;
-            margin-top: 15px;
+            margin-top: 10px;
             padding: 8px;
             border-radius: 6px;
             border: none;
@@ -152,11 +154,6 @@
             cursor: pointer;
             text-align: center;
         }
-        #blue-trigger-btn:hover {
-            background-color: #005bb5;
-        }
-
-        /* Gizli Sayfa (Modal) */
         #secret-page {
             display: none;
             position: fixed;
@@ -167,7 +164,6 @@
             align-items: center;
             justify-content: center;
         }
-        /* Sağ üst çarpı butonu */
         #close-btn {
             position: absolute;
             top: 20px;
@@ -182,30 +178,23 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            border: 1px solid #475569;
         }
-        #close-btn:hover {
-            background: #ef4444;
-        }
-        /* Yanıp sönen kırmızı buton efekti */
         @keyframes pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.95); }
-            100% { opacity: 1; transform: scale(1); }
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
         }
         #red-button {
             background-color: #ef4444;
             color: white;
-            font-size: 22px;
-            padding: 20px 40px;
+            font-size: 20px;
+            padding: 15px 30px;
             border-radius: 50px;
             animation: pulse 1s infinite;
             border: none;
             cursor: pointer;
             font-weight: bold;
-            box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
         }
-
         .offline-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -218,18 +207,18 @@
         }
         .modal-box {
             background: #1e293b;
-            padding: 30px;
+            padding: 25px;
             border-radius: 12px;
             text-align: center;
             border: 2px solid #38bdf8;
-            max-width: 400px;
+            max-width: 350px;
         }
         .modal-box button {
-            margin-top: 15px;
+            margin-top: 12px;
             background: #0284c7;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
@@ -238,189 +227,212 @@
 </head>
 <body>
 
-    <!-- Sağ üst köşe minik versiyon etiketi -->
-    <div id="version-tag">v1.0</div>
+    <div id="version-tag">v2.0</div>
 
     <header>
         <h2>Pistachio Tycoon 💸</h2>
         <div class="stats-container">
             <div class="stat-box">Bakiye: <span id="balance">0</span>$</div>
-            <div class="stat-box">Pasif Gelir: <span id="passive-income">0</span>$/dk</div>
-            <div class="stat-box">Tıklama Gücü: <span id="click-power">1</span>$</div>
+            <div class="stat-box">Aktif Kart Limiti: <span id="active-limit">10.000$</span></div>
         </div>
     </header>
 
     <main>
-        <!-- Tıklama Ekranı -->
         <div class="clicker-section">
             <button id="big-click-btn" onclick="handleClick()">PARA KAZAN! 💵</button>
         </div>
 
-        <!-- Sekme İçerikleri -->
+        <!-- Sekmeler -->
         <div id="tab-click" class="tab-content active">
-            <h3>Tıklama Seviyeleri</h3>
-            <p style="margin-bottom: 15px; color: #94a3b8; font-size: 14px;">Tıklama başına kazancını yükselt!</p>
+            <h3>Tıklama Gücü</h3>
+            <p style="margin-bottom: 12px; color: #94a3b8; font-size: 13px;">Tıklama başına kazancını artır.</p>
             <div id="click-upgrades-list"></div>
         </div>
 
         <div id="tab-cards" class="tab-content">
-            <h3>Kredi Kartları</h3>
-            <p style="margin-bottom: 15px; color: #94a3b8; font-size: 14px;">Limitleri artır, finansal gücünü göster!</p>
+            <h3>Kredi Kartları & Limitler</h3>
+            <p style="margin-bottom: 12px; color: #94a3b8; font-size: 13px;">Bakiyen aktif kart limitini asla aşamaz!</p>
             <div id="cards-list"></div>
+        </div>
+
+        <div id="tab-crypto" class="tab-content">
+            <h3>Kripto Borsa</h3>
+            <p style="margin-bottom: 12px; color: #94a3b8; font-size: 13px;">Coin al, her saniye değişen fiyatlarla kar et!</p>
+            <div id="crypto-list"></div>
         </div>
 
         <div id="tab-houses" class="tab-content">
             <h3>Gayrimenkuller (Evler)</h3>
-            <p style="margin-bottom: 15px; color: #94a3b8; font-size: 14px;">Ev al, düzenli kira geliri topla!</p>
+            <p style="margin-bottom: 12px; color: #94a3b8; font-size: 13px;">Ev alarak düzenli adet geliri elde et.</p>
             <div id="houses-list"></div>
         </div>
 
         <div id="tab-companies" class="tab-content">
             <h3>Şirketler İmparatorluğu</h3>
-            <p style="margin-bottom: 15px; color: #94a3b8; font-size: 14px;">Yerel, Bölgesel ve Küresel şirketler kur!</p>
+            <p style="margin-bottom: 12px; color: #94a3b8; font-size: 13px;">Şirketler her oyun saatinde bir kasa doldurur!</p>
             <div id="companies-list"></div>
         </div>
 
         <div id="tab-cars" class="tab-content">
-            <h3>Koleksiyon Arabaları</h3>
-            <p style="margin-bottom: 15px; color: #94a3b8; font-size: 14px;">Statü göstergesi lüks araçlar (Para kazandırmaz, kral durur!)</p>
+            <h3>Lüks Arabalar</h3>
+            <p style="margin-bottom: 12px; color: #94a3b8; font-size: 13px;">Garajını en kral arabalarla donat.</p>
             <div id="cars-list"></div>
-            <!-- Arabalar sekmesinin en aşağısındaki minik mavi buton -->
-            <button id="blue-trigger-btn" onclick="openSecretPage()">🔵 Gizli Alan</button>
+            <button id="blue-trigger-btn" onclick="openSecretPage()">🔵 Gizli Sınırsız Para Odası</button>
         </div>
     </main>
 
     <nav>
         <button class="tab-btn active" onclick="switchTab('click', event)">Tıklama</button>
         <button class="tab-btn" onclick="switchTab('cards', event)">Kartlar</button>
+        <button class="tab-btn" onclick="switchTab('crypto', event)">Borsa</button>
         <button class="tab-btn" onclick="switchTab('houses', event)">Evler</button>
         <button class="tab-btn" onclick="switchTab('companies', event)">Şirketler</button>
         <button class="tab-btn" onclick="switchTab('cars', event)">Arabalar</button>
     </nav>
 
-    <!-- Gizli Sayfa Ekranı (Modal) -->
+    <!-- Gizli Sayfa -->
     <div id="secret-page">
         <div id="close-btn" onclick="closeSecretPage()">✕</div>
-        <h2 style="margin-bottom: 10px; color: #38bdf8;">Gizli Milyoner Odası</h2>
-        <p style="margin-bottom: 30px; color: #94a3b8;">İstediğin kadar tıklayıp servetine servet katabilirsin!</p>
+        <h2 style="margin-bottom: 10px; color: #38bdf8;">Özel Limit Kırıcı</h2>
+        <p style="margin-bottom: 25px; color: #94a3b8;">Bu buton limitlere takılmadan anında 1 Milyon Dolar ekler!</p>
         <button id="red-button" onclick="getMillionaire()">1 Milyon Dolar Al! 💰</button>
     </div>
 
-    <!-- Çevrimdışı Kazanç Modalı -->
+    <!-- Çevrimdışı Özet -->
     <div id="offline-modal" class="offline-modal">
         <div class="modal-box">
             <h3>Hoş Geldin Pistachio! 🎉</h3>
-            <p id="offline-text" style="margin: 15px 0; color: #cbd5e1;"></p>
-            <button onclick="closeOfflineModal()">Parayı Al ve Devam Et</button>
+            <p id="offline-text" style="margin: 12px 0; color: #cbd5e1; font-size: 13px;"></p>
+            <button onclick="closeOfflineModal()">Topla ve Devam Et</button>
         </div>
     </div>
 
     <script>
-        // Oyun Verileri
         let gameData = {
             balance: 0,
-            clickLevel: 0, 
+            clickLevel: 0,
             cardLevel: 0,
+            cryptoOwned: [0, 0, 0],
+            cryptoSpent: [0, 0, 0],
             houses: [0, 0, 0],
-            companies: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-            cars: [0, 0, 0, 0, 0],
+            companies: [0, 0, 0],
+            cars: [0, 0, 0, 0],
             lastActive: Date.now()
         };
 
         const clickLevels = [
             { level: 1, cost: 0, reward: 1 },
             { level: 2, cost: 100, reward: 5 },
-            { level: 3, cost: 500, reward: 10 },
-            { level: 4, cost: 2000, reward: 25 },
-            { level: 5, cost: 10000, reward: 100 },
-            { level: 6, cost: 50000, reward: 125 },
-            { level: 7, cost: 200000, reward: 150 },
-            { level: 8, cost: 1000000, reward: 175 },
-            { level: 9, cost: 5000000, reward: 200 },
-            { level: 10, cost: 20000000, reward: 250 }
+            { level: 3, cost: 500, reward: 15 },
+            { level: 4, cost: 2000, reward: 50 }
         ];
 
         const creditCards = [
-            { name: "Standart Kart", limit: "10.000$", cost: 0 },
-            { name: "Gold Kart", limit: "50.000$", cost: 5000 },
-            { name: "Platinum Kart", limit: "250.000$", cost: 25000 },
-            { name: "Black Kart", limit: "1.000.000$", cost: 100000 },
-            { name: "Infinite (Sınırsız) Kart", limit: "SINIRSIZ ∞", cost: 500000 }
+            { name: "Standart Kart", limit: 10000, cost: 0 },
+            { name: "Gold Kart", limit: 50000, cost: 5000 },
+            { name: "Platinum Kart", limit: 250000, cost: 25000 },
+            { name: "Black Kart", limit: 1000000, cost: 100000 },
+            { name: "Infinite Sınırsız Kart", limit: Infinity, cost: 500000 }
+        ];
+
+        let cryptos = [
+            { name: "PistachioCoin (PSTR)", price: 50, min: 20, max: 150 },
+            { name: "TokenX (TKN)", price: 200, min: 80, max: 500 },
+            { name: "MoonCoin (MOON)", price: 1200, min: 400, max: 3000 }
         ];
 
         const houseTypes = [
-            { name: "Stüdyo Daire", cost: 100000, income: 10000 },
-            { name: "Lüks Rezidans", cost: 750000, income: 85000 },
-            { name: "Villa", cost: 3000000, income: 380000 }
+            { name: "Stüdyo Daire", cost: 10000, income: 500 },
+            { name: "Lüks Rezidans", cost: 80000, income: 4500 },
+            { name: "Malikane", cost: 400000, income: 25000 }
         ];
 
         const companyTypes = [
-            { name: "Taksi Şirketi (Yerel)", cost: 50000, income: 4000 },
-            { name: "Taksi Şirketi (Bölgesel)", cost: 300000, income: 28000 },
-            { name: "Taksi Şirketi (Küresel)", cost: 1500000, income: 150000 },
-            { name: "Emlak Şirketi (Yerel)", cost: 120000, income: 10000 },
-            { name: "Emlak Şirketi (Bölgesel)", cost: 700000, income: 65000 },
-            { name: "Emlak Şirketi (Küresel)", cost: 3500000, income: 360000 },
-            { name: "Yazılım Şirketi (Yerel)", cost: 200000, income: 18000 },
-            { name: "Yazılım Şirketi (Bölgesel)", cost: 1200000, income: 120000 },
-            { name: "Yazılım Şirketi (Küresel)", cost: 6000000, income: 650000 },
-            { name: "İnşaat Şirketi (Yerel)", cost: 500000, income: 45000 },
-            { name: "İnşaat Şirketi (Bölgesel)", cost: 3000000, income: 310000 },
-            { name: "İnşaat Şirketi (Küresel)", cost: 15000000, income: 1700000 },
-            { name: "Spor Kulübü / Şirketi (Yerel)", cost: 1000000, income: 95000 },
-            { name: "Spor Kulübü / Şirketi (Bölgesel)", cost: 6000000, income: 640000 },
-            { name: "Spor Kulübü / Şirketi (Küresel)", cost: 30000000, income: 3500000 }
+            { name: "Yerel Büfe", cost: 20000, income: 2000 },
+            { name: "Teknoloji Girişimi", cost: 150000, income: 18000 },
+            { name: "Küresel Holding", cost: 800000, income: 100000 }
         ];
 
         const carTypes = [
-            { name: "Şehir İçi Hatchback", cost: 15000 },
-            { name: "Spor Sedan", cost: 80000 },
-            { name: "Lüks SUV", cost: 350000 },
-            { name: "Süper Araba (Supercar)", cost: 2000000 },
-            { name: "Hiper Araba (Hypercar)", cost: 10000000 }
+            { name: "Şehir İçi Hatchback", cost: 12000 },
+            { name: "Spor Sedan", cost: 75000 },
+            { name: "Süper Araba", cost: 350000 },
+            { name: "Hiper Araba", cost: 1500000 }
         ];
 
         function initGame() {
             loadGame();
             checkOfflineProgress();
             renderAll();
-            setInterval(gameLoop, 1000); 
+            setInterval(gameLoop, 1000); // Her saniye döngü
+            setInterval(cryptoMarketLoop, 2000); // Borsa her 2 saniyede bir güncellenir
+        }
+
+        function getCurrentLimit() {
+            return creditCards[gameData.cardLevel].limit;
+        }
+
+        function addBalance(amount, bypassLimit = false) {
+            gameData.balance += amount;
+            let limit = getCurrentLimit();
+            if (!bypassLimit && gameData.balance > limit) {
+                gameData.balance = limit; // Limiti asla geçemez!
+            }
         }
 
         function handleClick() {
             let reward = clickLevels[gameData.clickLevel].reward;
-            gameData.balance += reward;
+            addBalance(reward);
             updateUI();
         }
 
-        function getPassiveIncomePerSecond() {
-            let total = 0;
-            gameData.houses.forEach((count, idx) => {
-                total += (houseTypes[idx].income / 60) * count;
-            });
-            gameData.companies.forEach((count, idx) => {
-                total += (companyTypes[idx].income / 60) * count;
-            });
-            return total;
-        }
-
         function gameLoop() {
-            let perSec = getPassiveIncomePerSecond();
-            gameData.balance += perSec;
+            // Evlerden gelen saniyelik/dakikalık pasif gelir
+            gameData.houses.forEach((count, idx) => {
+                if (count > 0) {
+                    let inc = (houseTypes[idx].income / 60) * count;
+                    addBalance(inc);
+                }
+            });
             gameData.lastActive = Date.now();
             saveGame();
             updateUI();
         }
 
+        // Şirketler saat başı para getirir (Oyun saat döngüsü: Her 60 saniye 1 oyun saati sayılır)
+        let gameSecondsCounter = 0;
+        function checkCompanyIncome() {
+            gameSecondsCounter++;
+            if (gameSecondsCounter >= 60) { // 60 saniyede bir (1 saat) şirketler kasayı doldurur
+                gameData.companies.forEach((count, idx) => {
+                    if (count > 0) {
+                        let totalInc = companyTypes[idx].income * count;
+                        addBalance(totalInc);
+                    }
+                });
+                gameSecondsCounter = 0;
+            }
+        }
+        setInterval(checkCompanyIncome, 1000);
+
+        function cryptoMarketLoop() {
+            cryptos.forEach((c) => {
+                let changePercent = (Math.random() * 20 - 9.5) / 100; // -%9.5 ile +%10.5 arası değişim
+                c.price = Math.round(Math.max(c.min, Math.min(c.max, c.price * (1 + changePercent))));
+            });
+            renderCrypto();
+        }
+
         function updateUI() {
             document.getElementById("balance").innerText = Math.floor(gameData.balance).toLocaleString();
-            document.getElementById("passive-income").innerText = Math.floor(getPassiveIncomePerSecond() * 60).toLocaleString();
-            document.getElementById("click-power").innerText = clickLevels[gameData.clickLevel].reward;
+            let limit = getCurrentLimit();
+            document.getElementById("active-limit").innerText = limit === Infinity ? "SINIRSIZ ∞" : limit.toLocaleString() + "$";
         }
 
         function renderAll() {
             renderClickUpgrades();
             renderCards();
+            renderCrypto();
             renderHouses();
             renderCompanies();
             renderCars();
@@ -440,13 +452,13 @@
                         <strong>Seviye ${lvl.level} Tıklama</strong><br>
                         <small style="color: #38bdf8;">Tık Başı: ${lvl.reward}$</small>
                     </div>
-                    <button ${disabled ? "disabled style='background: #475569; cursor: not-allowed;'" : ""} onclick="buyClickLevel(${idx})">${btnText}</button>
+                    <button ${disabled ? "disabled style='background: #475569;'" : ""} onclick="buyClick(${idx})">${btnText}</button>
                 </div>`;
             });
             document.getElementById("click-upgrades-list").innerHTML = html;
         }
 
-        function buyClickLevel(idx) {
+        function buyClick(idx) {
             let lvl = clickLevels[idx];
             if (gameData.balance >= lvl.cost && gameData.clickLevel === idx - 1) {
                 gameData.balance -= lvl.cost;
@@ -459,15 +471,16 @@
             let html = "";
             creditCards.forEach((card, idx) => {
                 let isOwned = gameData.cardLevel >= idx;
-                let btnText = isOwned ? "Sahipsin" : `Al (${card.cost.toLocaleString()}$)`;
+                let btnText = isOwned ? "Kullanılıyor / Sahipsin" : `Satın Al (${card.cost.toLocaleString()}$)`;
                 let disabled = isOwned || gameData.balance < card.cost;
+                let limitText = card.limit === Infinity ? "SINIRSIZ ∞" : card.limit.toLocaleString() + "$";
 
                 html += `<div class="item-card">
                     <div>
                         <strong>${card.name}</strong><br>
-                        <small style="color: #38bdf8;">Limit: ${card.limit}</small>
+                        <small style="color: #38bdf8;">Limit: ${limitText}</small>
                     </div>
-                    <button ${disabled ? "disabled style='background: #475569; cursor: not-allowed;'" : ""} onclick="buyCard(${idx})">${btnText}</button>
+                    <button ${disabled ? "disabled style='background: #475569;'" : ""} onclick="buyCard(${idx})">${btnText}</button>
                 </div>`;
             });
             document.getElementById("cards-list").innerHTML = html;
@@ -482,15 +495,52 @@
             }
         }
 
+        function renderCrypto() {
+            let html = "";
+            cryptos.forEach((c, idx) => {
+                let owned = gameData.cryptoOwned[idx];
+                html += `<div class="item-card">
+                    <div>
+                        <strong>${c.name}</strong> (Adet: ${owned})<br>
+                        <small style="color: #38bdf8;">Fiyat: ${c.price}$</small>
+                    </div>
+                    <div>
+                        <button onclick="buyCrypto(${idx})" style="background: #0284c7; margin-right: 5px;">Al</button>
+                        <button onclick="sellCrypto(${idx})" ${owned <= 0 ? "disabled style='background: #475569;'" : ""}>Sat</button>
+                    </div>
+                </div>`;
+            });
+            let el = document.getElementById("crypto-list");
+            if (el) el.innerHTML = html;
+        }
+
+        function buyCrypto(idx) {
+            let price = cryptos[idx].price;
+            if (gameData.balance >= price) {
+                gameData.balance -= price;
+                gameData.cryptoOwned[idx]++;
+                renderAll();
+            }
+        }
+
+        function sellCrypto(idx) {
+            if (gameData.cryptoOwned[idx] > 0) {
+                let price = cryptos[idx].price;
+                gameData.cryptoOwned[idx]--;
+                addBalance(price);
+                renderAll();
+            }
+        }
+
         function renderHouses() {
             let html = "";
-            houseTypes.forEach((house, idx) => {
+            houseTypes.forEach((h, idx) => {
                 let count = gameData.houses[idx];
                 html += `<div class="item-card">
                     <div>
-                        <strong>${house.name}</strong> (Adet: ${count})<br>
-                        <small style="color: #38bdf8;">Kira Geliri: ${house.income.toLocaleString()}$ / ay</small><br>
-                        <small style="color: #22c55e;">Fiyat: ${house.cost.toLocaleString()}$</small>
+                        <strong>${h.name}</strong> (Adet: ${count})<br>
+                        <small style="color: #38bdf8;">Kira Geliri: ${h.income}$ / dk</small><br>
+                        <small style="color: #22c55e;">Fiyat: ${h.cost.toLocaleString()}$</small>
                     </div>
                     <button onclick="buyHouse(${idx})">Satın Al</button>
                 </div>`;
@@ -499,9 +549,9 @@
         }
 
         function buyHouse(idx) {
-            let house = houseTypes[idx];
-            if (gameData.balance >= house.cost) {
-                gameData.balance -= house.cost;
+            let h = houseTypes[idx];
+            if (gameData.balance >= h.cost) {
+                gameData.balance -= h.cost;
                 gameData.houses[idx]++;
                 renderAll();
             }
@@ -513,31 +563,4 @@
                 let count = gameData.companies[idx];
                 html += `<div class="item-card">
                     <div>
-                        <strong>${comp.name}</strong> (Adet: ${count})<br>
-                        <small style="color: #38bdf8;">Gelir: ${comp.income.toLocaleString()}$ / ay</small><br>
-                        <small style="color: #22c55e;">Fiyat: ${comp.cost.toLocaleString()}$</small>
-                    </div>
-                    <button onclick="buyCompany(${idx})">Kur / Geliştir</button>
-                </div>`;
-            });
-            document.getElementById("companies-list").innerHTML = html;
-        }
-
-        function buyCompany(idx) {
-            let comp = companyTypes[idx];
-            if (gameData.balance >= comp.cost) {
-                gameData.balance -= comp.cost;
-                gameData.companies[idx]++;
-                renderAll();
-            }
-        }
-
-        function renderCars() {
-            let html = "";
-            carTypes.forEach((car, idx) => {
-                let count = gameData.cars[idx];
-                html += `<div class="item-card">
-                    <div>
-                        <strong>${car.name}</strong> (Garajda: ${count})<br>
-                        <small style="color: #94a3b8;">Statü Aracı (Para getirmez)</small><br>
-                        <small style="color: #22c55e;">Fiyat: ${car.cost.toLocaleString()}$</smal
+                        <strong>${comp.name}</strong> (Adet: ${count})
