@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pistachio Tycoon - Fixed v5</title>
+    <title>Pistachio Tycoon - Perfect Edition v6</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
         }
         body {
             background-color: #0f172a;
@@ -18,7 +19,6 @@
             flex-direction: column;
             height: 100vh;
             overflow: hidden;
-            position: relative;
         }
         #version-tag {
             position: fixed;
@@ -31,7 +31,7 @@
         }
         header {
             background: #1e293b;
-            padding: 12px 20px;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -40,14 +40,15 @@
         }
         .stats-container {
             display: flex;
-            gap: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         .stat-box {
             background: #0f172a;
-            padding: 6px 12px;
+            padding: 6px 10px;
             border-radius: 8px;
             border: 1px solid #475569;
-            font-size: 13px;
+            font-size: 12px;
         }
         .stat-box span {
             color: #38bdf8;
@@ -58,69 +59,65 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             padding: 15px;
-            position: relative;
+            overflow-y: auto;
         }
         .clicker-section {
             text-align: center;
-            margin-bottom: 15px;
+            margin: 10px 0 15px 0;
         }
         #big-click-btn {
             background: linear-gradient(135deg, #22c55e, #15803d);
             color: white;
             border: none;
-            width: 170px;
-            height: 170px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
-            transition: transform 0.1s;
+            transition: transform 0.05s;
         }
         #big-click-btn:active {
-            transform: scale(0.93);
+            transform: scale(0.92);
         }
         nav {
             background: #1e293b;
             display: flex;
             justify-content: space-around;
-            padding: 10px;
+            padding: 8px;
             border-top: 2px solid #334155;
-            flex-wrap: wrap;
+            gap: 4px;
         }
         .tab-btn {
             background: #334155;
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 8px 10px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 12px;
-            transition: background 0.2s;
+            font-size: 11px;
+            flex: 1;
+            text-align: center;
         }
-        .tab-btn.active, .tab-btn:hover {
+        .tab-btn.active {
             background: #0284c7;
         }
         .tab-content {
             display: none;
             width: 100%;
-            max-width: 700px;
-            height: 290px;
+            max-width: 600px;
             background: #1e293b;
             border-radius: 12px;
             padding: 15px;
-            overflow-y: auto;
             border: 1px solid #475569;
-        }
-        .tab-content.active {
-            display: block;
         }
         .item-card {
             background: #0f172a;
-            padding: 10px 14px;
+            padding: 10px 12px;
             border-radius: 8px;
             margin-bottom: 8px;
             display: flex;
@@ -133,32 +130,27 @@
             background: #22c55e;
             color: white;
             border: none;
-            padding: 6px 10px;
-            border-radius: 4px;
+            padding: 8px 12px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
             font-size: 11px;
-            margin-left: 5px;
-        }
-        .item-card button:hover:not(:disabled) {
-            background: #16a34a;
         }
         .item-card button:disabled {
             background: #475569 !important;
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 0.5;
         }
         #blue-trigger-btn {
             background-color: #007aff;
             width: 100%;
-            margin-top: 10px;
-            padding: 8px;
+            margin-top: 15px;
+            padding: 10px;
             border-radius: 6px;
             border: none;
             color: white;
             font-weight: bold;
             cursor: pointer;
-            text-align: center;
         }
         #secret-page {
             display: none;
@@ -185,62 +177,38 @@
             justify-content: center;
             cursor: pointer;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.95); }
-            100% { transform: scale(1); }
-        }
         #red-button {
             background-color: #ef4444;
             color: white;
             font-size: 18px;
             padding: 15px 30px;
             border-radius: 50px;
-            animation: pulse 1s infinite;
             border: none;
             cursor: pointer;
             font-weight: bold;
         }
-        .offline-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            display: none;
-        }
-        .modal-box {
-            background: #1e293b;
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid #38bdf8;
-            max-width: 350px;
-        }
-        .modal-box button {
-            margin-top: 12px;
-            background: #0284c7;
+        .reset-btn {
+            background: #dc2626;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
             cursor: pointer;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div id="version-tag">v5.0</div>
+    <div id="version-tag">v6.0</div>
 
     <header>
         <h2>Pistachio Tycoon 💸</h2>
         <div class="stats-container">
             <div class="stat-box">Bakiye: <span id="balance">0</span>$</div>
-            <div class="stat-box">Aktif Kart Limiti: <span id="active-limit">1.000.000$</span></div>
-            <div class="stat-box">Oyun Saati: <span id="game-hour">00:00</span></div>
+            <div class="stat-box">Limit: <span id="active-limit">1.000.000$</span></div>
+            <div class="stat-box">Saat: <span id="game-hour">00:00</span></div>
+            <button class="reset-btn" onclick="resetGame()">Sıfırla</button>
         </div>
     </header>
 
@@ -249,39 +217,39 @@
             <button id="big-click-btn" onclick="handleClick()">PARA KAZAN! 💵</button>
         </div>
 
-        <div id="tab-click" class="tab-content active">
+        <div id="tab-click" class="tab-content" style="display: block;">
             <h3>Tıklama Gücü</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Tıklama başına kazancını artır.</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 11px;">Tıklama başına kazancı artırır.</p>
             <div id="click-upgrades-list"></div>
         </div>
 
         <div id="tab-cards" class="tab-content">
             <h3>Kredi Kartları & Limitler</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Bakiyen aktif kart limitini aşamaz!</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 11px;">Bakiye bu limiti geçemez.</p>
             <div id="cards-list"></div>
         </div>
 
         <div id="tab-crypto" class="tab-content">
             <h3>Kripto Borsa</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Coin alıp satarak kar et.</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 11px;">Al sat yaparak kar et.</p>
             <div id="crypto-list"></div>
         </div>
 
         <div id="tab-houses" class="tab-content">
             <h3>Gayrimenkuller (Evler)</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Saatlik gelir getirir, max 5. seviye yapılabilir!</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 11px;">Saatlik gelir getirir, max 5. seviye yapılır.</p>
             <div id="houses-list"></div>
         </div>
 
         <div id="tab-companies" class="tab-content">
             <h3>Şirketler İmparatorluğu</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Şirketler her saat kasayı doldurur!</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 11px;">Şirketler otomatik saatlik kar üretir.</p>
             <div id="companies-list"></div>
         </div>
 
         <div id="tab-cars" class="tab-content">
             <h3>Lüks Arabalar</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Garajdaki araçlar (Getirisi yoktur, adetleri yazar).</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 11px;">Garajdaki araçlar (Getirisi yoktur, adedi yazar).</p>
             <div id="cars-list"></div>
             <button id="blue-trigger-btn" onclick="openSecretPage()">🔵 Gizli Sınırsız Para Odası</button>
         </div>
@@ -299,20 +267,12 @@
     <div id="secret-page">
         <div id="close-btn" onclick="closeSecretPage()">✕</div>
         <h2 style="margin-bottom: 10px; color: #38bdf8;">Özel Limit Kırıcı</h2>
-        <p style="margin-bottom: 25px; color: #94a3b8;">Bu buton limitlere takılmadan 1.000.000$ ekler!</p>
+        <p style="margin-bottom: 20px; color: #94a3b8;">Sınırsız bütçene anında 1.000.000$ ekler!</p>
         <button id="red-button" onclick="getMillionaire()">1 Milyon Dolar Al! 💰</button>
     </div>
 
-    <div id="offline-modal" class="offline-modal">
-        <div class="modal-box">
-            <h3>Hoş Geldin Pistachio! 🎉</h3>
-            <p id="offline-text" style="margin: 12px 0; color: #cbd5e1; font-size: 13px;"></p>
-            <button onclick="closeOfflineModal()">Topla ve Devam Et</button>
-        </div>
-    </div>
-
     <script>
-        let gameData = {
+        const DEFAULT_DATA = {
             balance: 0,
             clickLevel: 0,
             cardLevel: 0,
@@ -320,15 +280,16 @@
             houseLevels: [0, 0, 0, 0],
             companies: [0, 0, 0],
             cars: [0, 0, 0, 0],
-            gameTimeMinutes: 0,
-            lastActive: Date.now()
+            gameTimeMinutes: 0
         };
+
+        let gameData = { ...DEFAULT_DATA };
 
         const clickLevels = [
             { level: 1, cost: 0, reward: 10 },
-            { level: 2, cost: 500, reward: 50 },
-            { level: 3, cost: 2500, reward: 250 },
-            { level: 4, cost: 10000, reward: 1000 }
+            { level: 2, cost: 200, reward: 50 },
+            { level: 3, cost: 1000, reward: 250 },
+            { level: 4, cost: 5000, reward: 1000 }
         ];
 
         const creditCards = [
@@ -365,24 +326,25 @@
             { name: "Hiper Araba", cost: 1500000 }
         ];
 
-        function initGame() {
+        function init() {
             loadGame();
-            checkOfflineProgress();
             renderAll();
             setInterval(gameLoop, 1000);
             setInterval(cryptoMarketLoop, 2000);
         }
 
         function getCurrentLimit() {
-            return creditCards[gameData.cardLevel].limit;
+            return creditCards[gameData.cardLevel] ? creditCards[gameData.cardLevel].limit : 1000000;
         }
 
-        function addBalance(amount, bypassLimit = false) {
+        function addBalance(amount, bypass = false) {
             gameData.balance += amount;
             let limit = getCurrentLimit();
-            if (!bypassLimit && gameData.balance > limit) {
+            if (!bypass && gameData.balance > limit) {
                 gameData.balance = limit;
             }
+            saveGame();
+            updateHeader();
         }
 
         function handleClick() {
@@ -393,28 +355,18 @@
 
         function gameLoop() {
             gameData.gameTimeMinutes += 15;
-            if (gameData.gameTimeMinutes >= 1440) {
-                gameData.gameTimeMinutes = 0;
-            }
+            if (gameData.gameTimeMinutes >= 1440) gameData.gameTimeMinutes = 0;
 
             if (gameData.gameTimeMinutes % 60 === 0) {
                 gameData.houseLevels.forEach((lvl, idx) => {
-                    if (lvl > 0) {
-                        let h = houseTypes[idx];
-                        addBalance(h.baseIncome * lvl);
-                    }
+                    if (lvl > 0) addBalance(houseTypes[idx].baseIncome * lvl);
                 });
-
                 gameData.companies.forEach((count, idx) => {
-                    if (count > 0) {
-                        addBalance(companyTypes[idx].income * count);
-                    }
+                    if (count > 0) addBalance(companyTypes[idx].income * count);
                 });
             }
-
-            gameData.lastActive = Date.now();
             saveGame();
-            updateUI();
+            updateHeader();
         }
 
         function cryptoMarketLoop() {
@@ -425,24 +377,24 @@
             renderCrypto();
         }
 
-        function updateUI() {
+        function updateHeader() {
             document.getElementById("balance").innerText = Math.floor(gameData.balance).toLocaleString();
             let limit = getCurrentLimit();
-            document.getElementById("active-limit").innerText = limit === Infinity ? "SINIRSIZ ∞" : limit.toLocaleString() + "$";
+            document.getElementById("active-limit").innerText = limit === Infinity ? "∞" : limit.toLocaleString() + "$";
             
-            let hours = Math.floor(gameData.gameTimeMinutes / 60);
-            let mins = gameData.gameTimeMinutes % 60;
-            document.getElementById("game-hour").innerText = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+            let h = Math.floor(gameData.gameTimeMinutes / 60);
+            let m = gameData.gameTimeMinutes % 60;
+            document.getElementById("game-hour").innerText = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
         }
 
         function renderAll() {
+            updateHeader();
             renderClickUpgrades();
             renderCards();
             renderCrypto();
             renderHouses();
             renderCompanies();
             renderCars();
-            updateUI();
         }
 
         function renderClickUpgrades() {
@@ -450,15 +402,15 @@
             clickLevels.forEach((lvl, idx) => {
                 let isCurrent = gameData.clickLevel === idx;
                 let isUnlocked = gameData.clickLevel > idx;
-                let btnText = isCurrent ? "Aktif" : (isUnlocked ? "Açıldı" : `Yükselt (${lvl.cost.toLocaleString()}$)`);
                 let disabled = isCurrent || isUnlocked || gameData.balance < lvl.cost;
+                let text = isCurrent ? "Aktif" : (isUnlocked ? "Açıldı" : `Yükselt (${lvl.cost.toLocaleString()}$)`);
 
                 html += `<div class="item-card">
                     <div>
                         <strong>Seviye ${lvl.level} Tıklama</strong><br>
-                        <small style="color: #38bdf8;">Tık Başı: ${lvl.reward}$</small>
+                        <small style="color:#38bdf8;">+${lvl.reward}$ / tık</small>
                     </div>
-                    <button ${disabled ? "disabled" : ""} onclick="buyClick(${idx})">${btnText}</button>
+                    <button ${disabled ? "disabled" : ""} onclick="buyClick(${idx})">${text}</button>
                 </div>`;
             });
             document.getElementById("click-upgrades-list").innerHTML = html;
@@ -477,16 +429,16 @@
             let html = "";
             creditCards.forEach((card, idx) => {
                 let isOwned = gameData.cardLevel >= idx;
-                let btnText = isOwned ? "Aktif / Sahipsin" : `Satın Al (${card.cost.toLocaleString()}$)`;
                 let disabled = isOwned || gameData.balance < card.cost;
                 let limitText = card.limit === Infinity ? "SINIRSIZ ∞" : card.limit.toLocaleString() + "$";
+                let text = isOwned ? "Sahipsin" : `Satın Al (${card.cost.toLocaleString()}$)`;
 
                 html += `<div class="item-card">
                     <div>
                         <strong>${card.name}</strong><br>
-                        <small style="color: #38bdf8;">Limit: ${limitText}</small>
+                        <small style="color:#38bdf8;">Limit: ${limitText}</small>
                     </div>
-                    <button ${disabled ? "disabled" : ""} onclick="buyCard(${idx})">${btnText}</button>
+                    <button ${disabled ? "disabled" : ""} onclick="buyCard(${idx})">${text}</button>
                 </div>`;
             });
             document.getElementById("cards-list").innerHTML = html;
@@ -504,15 +456,15 @@
         function renderCrypto() {
             let html = "";
             cryptos.forEach((c, idx) => {
-                let owned = gameData.cryptoOwned[idx];
+                let owned = gameData.cryptoOwned[idx] || 0;
                 let canBuy = gameData.balance >= c.price;
                 html += `<div class="item-card">
                     <div>
                         <strong>${c.name}</strong> (Adet: ${owned})<br>
-                        <small style="color: #38bdf8;">Fiyat: ${c.price}$</small>
+                        <small style="color:#38bdf8;">Fiyat: ${c.price}$</small>
                     </div>
                     <div>
-                        <button onclick="buyCrypto(${idx})" ${!canBuy ? "disabled" : ""} style="background: #0284c7; margin-right: 5px;">Al</button>
+                        <button onclick="buyCrypto(${idx})" ${!canBuy ? "disabled" : ""} style="background:#0284c7; margin-right:4px;">Al</button>
                         <button onclick="sellCrypto(${idx})" ${owned <= 0 ? "disabled" : ""}>Sat</button>
                     </div>
                 </div>`;
@@ -524,7 +476,7 @@
             let price = cryptos[idx].price;
             if (gameData.balance >= price) {
                 gameData.balance -= price;
-                gameData.cryptoOwned[idx]++;
+                gameData.cryptoOwned[idx] = (gameData.cryptoOwned[idx] || 0) + 1;
                 renderAll();
             }
         }
@@ -541,21 +493,57 @@
         function renderHouses() {
             let html = "";
             houseTypes.forEach((h, idx) => {
-                let currentLvl = gameData.houseLevels[idx];
+                let currentLvl = gameData.houseLevels[idx] || 0;
+                let isMax = currentLvl >= 5;
                 let cost = h.baseCost * (currentLvl + 1);
                 let income = h.baseIncome * (currentLvl === 0 ? 1 : currentLvl);
-                let isMax = currentLvl >= 5;
-
-                let btnText = currentLvl === 0 ? "Satın Al" : (isMax ? "Max Seviye" : `Seviye ${currentLvl + 1}'e Yükselt`);
                 let disabled = isMax || gameData.balance < cost;
+                let text = currentLvl === 0 ? "Satın Al" : (isMax ? "Max (5/5)" : "Yükselt");
 
                 html += `<div class="item-card">
                     <div>
-                        <strong>${h.name}</strong> ${currentLvl > 0 ? `(Seviye ${currentLvl}/5)` : '(Sahip Değilsin)'}<br>
-                        <small style="color: #38bdf8;">Saatlik Kira: ${income.toLocaleString()}$</small><br>
-                        <small style="color: #22c55e;">Bedel: ${isMax ? '-' : cost.toLocaleString() + '$'}</small>
+                        <strong>${h.name}</strong> ${currentLvl > 0 ? `(Sev ${currentLvl}/5)` : '(Yok)'}<br>
+                        <small style="color:#38bdf8;">Saatlik: ${income.toLocaleString()}$</small><br>
+                        <small style="color:#22c55e;">Bedel: ${isMax ? '-' : cost.toLocaleString() + '$'}</small>
                     </div>
-                    <button ${disabled ? "disabled" : ""} onclick="buyOrUpgradeHouse(${idx})">${btnText}</button>
+                    <button ${disabled ? "disabled" : ""} onclick="buyHouse(${idx})">${text}</button>
                 </div>`;
             });
-            document.getElementById("houses-list").innerH
+            document.getElementById("houses-list").innerHTML = html;
+        }
+
+        function buyHouse(idx) {
+            let h = houseTypes[idx];
+            let currentLvl = gameData.houseLevels[idx] || 0;
+            if (currentLvl < 5) {
+                let cost = h.baseCost * (currentLvl + 1);
+                if (gameData.balance >= cost) {
+                    gameData.balance -= cost;
+                    gameData.houseLevels[idx] = currentLvl + 1;
+                    renderAll();
+                }
+            }
+        }
+
+        function renderCompanies() {
+            let html = "";
+            companyTypes.forEach((comp, idx) => {
+                let count = gameData.companies[idx] || 0;
+                let disabled = gameData.balance < comp.cost;
+                html += `<div class="item-card">
+                    <div>
+                        <strong>${comp.name}</strong> (Adet: ${count})<br>
+                        <small style="color:#38bdf8;">Saatlik: ${comp.income.toLocaleString()}$</small><br>
+                        <small style="color:#22c55e;">Kurulum: ${comp.cost.toLocaleString()}$</small>
+                    </div>
+                    <button ${disabled ? "disabled" : ""} onclick="buyCompany(${idx})">Kur</button>
+                </div>`;
+            });
+            document.getElementById("companies-list").innerHTML = html;
+        }
+
+        function buyCompany(idx) {
+            let comp = companyTypes[idx];
+            if (gameData.balance >= comp.cost) {
+                gameData.balance -= comp.cost;
+              
