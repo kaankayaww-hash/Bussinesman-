@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pistachio Tycoon - Para İmparatorluğu</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background: #1e293b;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+        }
+        .stats-container {
+            display: flex;
+            gap: 25px;
+        }
+        .stat-box {
+            background: #0f172a;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+        }
+        .stat-box span {
+            color: #38bdf8;
+            font-weight: bold;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        .clicker-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #big-click-btn {
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            color: white;
+            border: none;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        #big-click-btn:active {
+            transform: scale(0.93);
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
+        }
+        nav {
+            background: #1e293b;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px;
+            border-top: 2px solid #334155;
+        }
+        .tab-btn {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: #0284c7;
+        }
+        .tab-content {
+            display: none;
+            width: 100%;
+            max-width: 700px;
+            height: 320px;
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-y: auto;
+            border: 1px solid #475569;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .item-card {
+            background: #0f172a;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #334155;
+        }
+        .item-card button {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .item-card button:hover {
+            background: #16a34a;
+        }
+        .offline-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            display: none;
+        }
+        .modal-box {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #38bdf8;
+            max-width: 400px;
+        }
+        .modal-box button {
+            margin-top: 15px;
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>Pistachio Tycoon 💸</h2>
+        <div class="stats-container">
+            <div class="stat-box">Bakiye: <span id="balance">0</span>$</div>
+            <div class="stat-box">Pasif Gelir: <span id="passive-income">0</span>$/dk</div>
+            <div class="stat-box">Tıklama Gücü: <span id="click-power">1</span>$</div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Tıklama Ekranı -->
+        <div class="clicker-section">
+            <button id="big-click-btn" onclick="handleClick()">PARA KAZAN! 💵</button>
+        </div>
+
+        <!-- Sekme İçerikleri -->
+        <div id="tab-click" class="tab-content active">
+            <h3>Tıklama Seviyeleri</h3>
+            <p style="margin-bottom: 15px; color: #94a3b8; font-size: 14px;">Tıklama başına kazancını yükselt!</p>
+            <div id="click-upgrades-list"></div>
+        </div>
+
+        <div id="tab-cards" class="tab-content">
+            <h3>Kredi Kartları</h3>
+            <p style="margin-bottom: 15px; color: #94a3b8; font-size: 14px;">Limitleri artır, finansal gücünü göster!</p>
+            <div id="cards-list"></div>
+        </div>
+
+        <div id="tab-houses" class="tab-content">
+            <h3>Gayrimenkuller (Evler)</h3>
+            <p style="margin-bottom: 15px; color: #94a3b8; font-size: 14px;">Ev al, düzenli kira geliri topla!</p>
+            <div id="houses-list"></div>
+        </div>
+
+        <div id="tab-companies" class="tab-content">
+            <h3>Şirketler İmparatorluğu</h3>
+            <p style="margin-bottom: 15px; color: #94a3b8; font-size: 14px;">Yerel, Bölgesel ve Küresel şirketler kur!</p>
+            <div id="companies-list"></div>
+        </div>
+
+        <div id="tab-cars" class="tab-content">
+            <h3>Koleksiyon Arabaları</h3>
+            <p style="margin-bottom: 15px; color: #94a3b8; font-size: 14px;">Statü göstergesi lüks araçlar (Para kazandırmaz, kral durur!)</p>
+            <div id="cars-list"></div>
+        </div>
+    </main>
+
+    <nav>
+        <button class="tab-btn active" onclick="switchTab('click', event)">Tıklama</button>
+        <button class="tab-btn" onclick="switchTab('cards', event)">Kartlar</button>
+        <button class="tab-btn" onclick="switchTab('houses', event)">Evler</button>
+        <button class="tab-btn" onclick="switchTab('companies', event)">Şirketler</button>
+        <button class="tab-btn" onclick="switchTab('cars', event)">Arabalar</button>
+    </nav>
+
+    <!-- Çevrimdışı Kazanç Modalı -->
+    <div id="offline-modal" class="offline-modal">
+        <div class="modal-box">
+            <h3>Hoş Geldin Pistachio! 🎉</h3>
+            <p id="offline-text" style="margin: 15px 0; color: #cbd5e1;"></p>
+            <button onclick="closeOfflineModal()">Parayı Al ve Devam Et</button>
+        </div>
+    </div>
+
+    <script>
+        // Oyun Verileri
+        let gameData = {
+            balance: 0,
+            clickLevel: 0, // 0 to 9 (10 levels)
+            cardLevel: 0,
+            houses: [0, 0, 0],
+            companies: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // 5 şirket x 3 kademe (Yerel, Bölgesel, Küresel)
+            cars: [0, 0, 0, 0, 0],
+            lastActive: Date.now()
+        };
+
+        const clickLevels = [
+            { level: 1, cost: 0, reward: 1 },
+            { level: 2, cost: 100, reward: 5 },
+            { level: 3, cost: 500, reward: 10 },
+            { level: 4, cost: 2000, reward: 25 },
+            { level: 5, cost: 10000, reward: 100 },
+            { level: 6, cost: 50000, reward: 125 },
+            { level: 7, cost: 200000, reward: 150 },
+            { level: 8, cost: 1000000, reward: 175 },
+            { level: 9, cost: 5000000, reward: 200 },
+            { level: 10, cost: 20000000, reward: 250 }
+        ];
+
+        const creditCards = [
+            { name: "Standart Kart", limit: "10.000$", cost: 0 },
+            { name: "Gold Kart", limit: "50.000$", cost: 5000 },
+            { name: "Platinum Kart", limit: "250.000$", cost: 25000 },
+            { name: "Black Kart", limit: "1.000.000$", cost: 100000 },
+            { name: "Infinite (Sınırsız) Kart", limit: "SINIRSIZ ∞", cost: 500000 }
+        ];
+
+        const houseTypes = [
+            { name: "Stüdyo Daire", cost: 100000, income: 10000 },
+            { name: "Lüks Rezidans", cost: 750000, income: 85000 },
+            { name: "Villa", cost: 3000000, income: 380000 }
+        ];
+
+        const companyTypes = [
+            // Taksi
+            { name: "Taksi Şirketi (Yerel)", cost: 50000, income: 4000 },
+            { name: "Taksi Şirketi (Bölgesel)", cost: 300000, income: 28000 },
+            { name: "Taksi Şirketi (Küresel)", cost: 1500000, income: 150000 },
+            // Emlak
+            { name: "Emlak Şirketi (Yerel)", cost: 120000, income: 10000 },
+            { name: "Emlak Şirketi (Bölgesel)", cost: 700000, income: 65000 },
+            { name: "Emlak Şirketi (Küresel)", cost: 3500000, income: 360000 },
+            // Yazılımcı
+            { name: "Yazılım Şirketi (Yerel)", cost: 200000, income: 18000 },
+            { name: "Yazılım Şirketi (Bölgesel)", cost: 1200000, income: 120000 },
+            { name: "Yazılım Şirketi (Küresel)", cost: 6000000, income: 650000 },
+            // İnşaat
+            { name: "İnşaat Şirketi (Yerel)", cost: 500000, income: 45000 },
+            { name: "İnşaat Şirketi (Bölgesel)", cost: 3000000, income: 310000 },
+            { name: "İnşaat Şirketi (Küresel)", cost: 15000000, income: 1700000 },
+            // Spor
+            { name: "Spor Kulübü / Şirketi (Yerel)", cost: 1000000, income: 95000 },
+            { name: "Spor Kulübü / Şirketi (Bölgesel)", cost: 6000000, income: 640000 },
+            { name: "Spor Kulübü / Şirketi (Küresel)", cost: 30000000, income: 3500000 }
+        ];
+
+        const carTypes = [
+            { name: "Şehir İçi Hatchback", cost: 15000 },
+            { name: "Spor Sedan", cost: 80000 },
+            { name: "Lüks SUV", cost: 350000 },
+            { name: "Süper Araba (Supercar)", cost: 2000000 },
+            { name: "Hiper Araba (Hypercar)", cost: 10000000 }
+        ];
+
+        function initGame() {
+            loadGame();
+            checkOfflineProgress();
+            renderAll();
+            setInterval(gameLoop, 1000); // Her saniye döngü
+        }
+
+        function handleClick() {
+            let reward = clickLevels[gameData.clickLevel].reward;
+            gameData.balance += reward;
+            updateUI();
+        }
+
+        function getPassiveIncomePerSecond() {
+            let total = 0;
+            // Evler (Aylık geliri saniyeye bölüyoruz veya dakikaya - oyun dengesi için)
+            gameData.houses.forEach((count, idx) => {
+                total += (houseTypes[idx].income / 60) * count;
+            });
+            // Şirketler
+            gameData.companies.forEach((count, idx) => {
+                total += (companyTypes[idx].income / 60) * count;
+            });
+            return total;
+        }
+
+        function gameLoop() {
+            let perSec = getPassiveIncomePerSecond();
+            gameData.balance += perSec;
+            gameData.lastActive = Date.now();
+            saveGame();
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById("balance").innerText = Math.floor(gameData.balance).toLocaleString();
+            document.getElementById("passive-income").innerText = Math.floor(getPassiveIncomePerSecond() * 60).toLocaleString();
+            document.getElementById("click-power").innerText = clickLevels[gameData.clickLevel].reward;
+        }
+
+        function renderAll() {
+            renderClickUpgrades();
+            renderCards();
+            renderHouses();
+            renderCompanies();
+            renderCars();
+            updateUI();
+        }
+
+        function renderClickUpgrades() {
+            let html = "";
+            clickLevels.forEach((lvl, idx) => {
+                let isCurrent = gameData.clickLevel === idx;
+                let isUnlocked = gameData.clickLevel > idx;
+                let btnText = isCurrent ? "Aktif" : (isUnlocked ? "Açıldı" : `Yükselt (${lvl.cost.toLocaleString()}$)`);
+                let disabled = isCurrent || isUnlocked || gameData.balance < lvl.cost;
+
+                html += `<div class="item-card">
+                    <div>
+                        <strong>Seviye ${lvl.level} Tıklama</strong><br>
+                        <small style="color: #38bdf8;">Tık Başı: ${lvl.reward}$</small>
+                    </div>
+                    <button ${disabled ? "disabled style='background: #475569; cursor: not-allowed;'" : ""} onclick="buyClickLevel(${idx})">${btnText}</button>
+                </div>`;
+            });
+            document.getElementById("click-upgrades-list").innerHTML = html;
+        }
+
+        function buyClickLevel(idx) {
+            let lvl = clickLevels[idx];
+            if (gameData.balance >= lvl.cost && gameData.clickLevel === idx - 1) {
+                gameData.balance -= lvl.cost;
+                gameData.clickLevel = idx;
+                renderAll();
+            }
+        }
+
+        function renderCards() {
+            let html = "";
+            creditCards.forEach((card, idx) => {
+                let isOwned = gameData.cardLevel >= idx;
+                let btnText = isOwned ? "Sahipsin" : `Al (${card.cost.toLocaleString()}$)`;
+                let disabled = isOwned || gameData.balance < card.cost;
+
+                html += `<div class="item-card">
+                    <div>
+                        <strong>${card.name}</strong><br>
+                        <small style="color: #38bdf8;">Limit: ${card.limit}</small>
+                    </div>
+                    <button ${disabled ? "disabled style='background: #475569; cursor: not-allowed;'" : ""} onclick="buyCard(${idx})">${btnText}</button>
+                </div>`;
+            });
+            document.getElementById("cards-list").innerHTML = html;
+        }
+
+        function buyCard(idx) {
+            let card = creditCards[idx];
+            if (gameData.balance >= card.cost && gameData.cardLevel === idx - 1) {
+                gameData.balance -= card.cost;
+                gameData.cardLevel = idx;
+                renderAll();
+            }
+        }
+
+        function renderHouses() {
+            let html = "";
+            houseTypes.forEach((house, idx) => {
+                let count = gameData.houses[idx];
+                html += `<div class="item-card">
+                    <div>
+                        <strong>${house.name}</strong> (Adet: ${count})<br>
+                        <small style="color: #38bdf8;">Kira Geliri: ${house.income.toLocaleString()}$ / ay</small><br>
+                        <small style="color: #22c55e;">Fiyat: ${house.cost.toLocaleString()}$</small>
+                    </div>
+                    <button onclick="buyHouse(${idx})">Satın Al</button>
+                </div>`;
+            });
+            document.getElementById("houses-list").innerHTML = html;
+        }
+
+        function buyHouse(idx) {
+            let house = houseTypes[idx];
+            if (gameData.balance >= house.cost) {
+                gameData.balance -= house.cost;
+                gameData.houses[idx]++;
+                renderAll();
+            }
+        }
+
+        function renderCompanies() {
+            let html = "";
+            companyTypes.forEach((comp, idx) => {
+                let count = gameData.companies[idx];
+                html += `<div class="item-card">
+                    <div>
+                        <strong>${comp.name}</strong> (Adet: ${count})<br>
+                        <small style="color: #38bdf8;">Gelir: ${comp.income.toLocaleString()}$ / ay</small><br>
+                        <small style="color: #22c55e;">Fiyat: ${comp.cost.toLocaleString()}$</small>
+                    </div>
+                    <button onclick="buyCompany(${idx})">Kur / Geliştir</button>
+                </div>`;
+            });
+            document.getElementById("companies-list").innerHTML = html;
+        }
+
+        function buyCompany(idx) {
+            let comp = companyTypes[idx];
+            if (gameData.balance >= comp.cost) {
+                gameData.balance -= comp.cost;
+                gameData.companies[idx]++;
+                renderAll();
+            }
+        }
+
+        function renderCars() {
+            let html = "";
+            carTypes.forEach((car, idx) => {
+                let count = gameData.cars[idx];
+                html += `<div class="item-card">
+                    <div>
+                        <strong>${car.name}</strong> (Garajda: ${count})<br>
+                        <small style="color: #94a3b8;">Statü Aracı (Para getirmez)</small><br>
+                        <small style="color: #22c55e;">Fiyat: ${car.cost.toLocaleString()}$</small>
+                    </div>
+                    <button onclick="buyCar(${idx})">Garaja Ekle</button>
+                </div>`;
+            });
+            document.getElementById("cars-list").innerHTML = html;
+        }
+
+        function buyCar(idx) {
+            let car = carTypes[idx];
+            if (gameData.balance >= car.cost) {
+                gameData.balance -= car.cost;
+                gameData.cars[idx]++;
+                renderAll();
+            }
+        }
+
+        function switchTab(tabName, event) {
+            document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+            document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+            document.getElementById("tab-" + tabName).classList.add("active");
+            event.target.classList.add("active");
+        }
+
+        function saveGame() {
+            localStorage.setItem("pistachioTycoonData", JSON.stringify(gameData));
+        }
+
+        function loadGame() {
+            let saved = localStorage.getItem("pistachioTycoonData");
+            if (saved) {
+                let parsed = JSON.parse(saved);
+                gameData = { ...gameData, ...parsed };
+            }
+        }
+
+        function checkOfflineProgress() {
+            let now = Date.now();
+            let elapsedSeconds = (now - gameData.lastActive) / 1000;
+            if (elapsedSeconds > 10) { // 10 saniyeden uzun süre kapalı kaldıysa
+                let offlineEarnings = elapsedSeconds * getPassiveIncomePerSecond();
+                if (offlineEarnings > 0) {
+                    gameData.balance += offlineEarnings;
+                    document.getElementById("offline-text").innerText = `Yokluğunda şirketlerin ve evlerin çalışmaya devam etti ve toplam ${Math.floor(offlineEarnings).toLocaleString()}$ kazandı! 📈`;
+                    document.getElementById("offline-modal").style.display = "flex";
+                }
+            }
+        }
+
+        function closeOfflineModal() {
+            document.getElementById("offline-modal").style.display = "none";
+        }
+
+        window.onload = initGame;
+    </script>
+</body>
+</html>
