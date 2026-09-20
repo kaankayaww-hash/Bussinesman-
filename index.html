@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pistachio Tycoon - Ultimate v4</title>
+    <title>Pistachio Tycoon - Fixed v5</title>
     <style>
         * {
             box-sizing: border-box;
@@ -140,8 +140,13 @@
             font-size: 11px;
             margin-left: 5px;
         }
-        .item-card button:hover {
+        .item-card button:hover:not(:disabled) {
             background: #16a34a;
+        }
+        .item-card button:disabled {
+            background: #475569 !important;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
         #blue-trigger-btn {
             background-color: #007aff;
@@ -228,7 +233,7 @@
 </head>
 <body>
 
-    <div id="version-tag">v4.0</div>
+    <div id="version-tag">v5.0</div>
 
     <header>
         <h2>Pistachio Tycoon 💸</h2>
@@ -244,7 +249,6 @@
             <button id="big-click-btn" onclick="handleClick()">PARA KAZAN! 💵</button>
         </div>
 
-        <!-- Sekmeler -->
         <div id="tab-click" class="tab-content active">
             <h3>Tıklama Gücü</h3>
             <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Tıklama başına kazancını artır.</p>
@@ -253,54 +257,52 @@
 
         <div id="tab-cards" class="tab-content">
             <h3>Kredi Kartları & Limitler</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Bakiyen aktif kart limitini asla aşamaz!</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Bakiyen aktif kart limitini aşamaz!</p>
             <div id="cards-list"></div>
         </div>
 
         <div id="tab-crypto" class="tab-content">
             <h3>Kripto Borsa</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Coin alıp satarak anlık kar elde et.</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Coin alıp satarak kar et.</p>
             <div id="crypto-list"></div>
         </div>
 
         <div id="tab-houses" class="tab-content">
             <h3>Gayrimenkuller (Evler)</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Saatlik gelir getirir, max 5. seviyeye geliştirilebilir!</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Saatlik gelir getirir, max 5. seviye yapılabilir!</p>
             <div id="houses-list"></div>
         </div>
 
         <div id="tab-companies" class="tab-content">
             <h3>Şirketler İmparatorluğu</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Şirketler her oyun saatinde bir kasa doldurur!</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Şirketler her saat kasayı doldurur!</p>
             <div id="companies-list"></div>
         </div>
 
         <div id="tab-cars" class="tab-content">
             <h3>Lüks Arabalar</h3>
-            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Garajındaki araçlar (Getirisi yoktur, statü göstergesidir).</p>
+            <p style="margin-bottom: 10px; color: #94a3b8; font-size: 12px;">Garajdaki araçlar (Getirisi yoktur, adetleri yazar).</p>
             <div id="cars-list"></div>
             <button id="blue-trigger-btn" onclick="openSecretPage()">🔵 Gizli Sınırsız Para Odası</button>
         </div>
     </main>
 
     <nav>
-        <button class="tab-btn active" onclick="switchTab('click', event)">Tıklama</button>
-        <button class="tab-btn" onclick="switchTab('cards', event)">Kartlar</button>
-        <button class="tab-btn" onclick="switchTab('crypto', event)">Borsa</button>
-        <button class="tab-btn" onclick="switchTab('houses', event)">Evler</button>
-        <button class="tab-btn" onclick="switchTab('companies', event)">Şirketler</button>
-        <button class="tab-btn" onclick="switchTab('cars', event)">Arabalar</button>
+        <button class="tab-btn active" onclick="switchTab('click', this)">Tıklama</button>
+        <button class="tab-btn" onclick="switchTab('cards', this)">Kartlar</button>
+        <button class="tab-btn" onclick="switchTab('crypto', this)">Borsa</button>
+        <button class="tab-btn" onclick="switchTab('houses', this)">Evler</button>
+        <button class="tab-btn" onclick="switchTab('companies', this)">Şirketler</button>
+        <button class="tab-btn" onclick="switchTab('cars', this)">Arabalar</button>
     </nav>
 
-    <!-- Gizli Sayfa -->
     <div id="secret-page">
         <div id="close-btn" onclick="closeSecretPage()">✕</div>
         <h2 style="margin-bottom: 10px; color: #38bdf8;">Özel Limit Kırıcı</h2>
-        <p style="margin-bottom: 25px; color: #94a3b8;">Bu buton limitlere takılmadan anında 1 Milyon Dolar ekler!</p>
+        <p style="margin-bottom: 25px; color: #94a3b8;">Bu buton limitlere takılmadan 1.000.000$ ekler!</p>
         <button id="red-button" onclick="getMillionaire()">1 Milyon Dolar Al! 💰</button>
     </div>
 
-    <!-- Çevrimdışı Özet -->
     <div id="offline-modal" class="offline-modal">
         <div class="modal-box">
             <h3>Hoş Geldin Pistachio! 🎉</h3>
@@ -313,9 +315,9 @@
         let gameData = {
             balance: 0,
             clickLevel: 0,
-            cardLevel: 0, // Başlangıçta Normal Kart (0) aktif
+            cardLevel: 0,
             cryptoOwned: [0, 0, 0],
-            houseLevels: [0, 0, 0, 0], // Normal Ev, Apartman, Villa, Malike (0 = Sahip değil, 1-5 = Seviye)
+            houseLevels: [0, 0, 0, 0],
             companies: [0, 0, 0],
             cars: [0, 0, 0, 0],
             gameTimeMinutes: 0,
@@ -323,19 +325,18 @@
         };
 
         const clickLevels = [
-            { level: 1, cost: 0, reward: 1 },
-            { level: 2, cost: 100, reward: 5 },
-            { level: 3, cost: 500, reward: 15 },
-            { level: 4, cost: 2000, reward: 50 }
+            { level: 1, cost: 0, reward: 10 },
+            { level: 2, cost: 500, reward: 50 },
+            { level: 3, cost: 2500, reward: 250 },
+            { level: 4, cost: 10000, reward: 1000 }
         ];
 
-        // İstediğin Kartlar ve Limitleri
         const creditCards = [
-            { name: "Normal Kart", limit: 1000000, cost: 0 },          // Bedava, max limit 1 milyon
-            { name: "Üstün Kart", limit: 5000000, cost: 1000000 },     // Bedeli 1 milyon, limit 5 milyon
-            { name: "Elmas Kart", limit: 10000000, cost: 5000000 },    // Bedeli 5 milyon, limit 10 milyon
-            { name: "Amerikan Kart", limit: 25000000, cost: 10000000 },// Bedeli 10 milyon, limit 25 milyon
-            { name: "Infinite Kart", limit: Infinity, cost: 50000000 } // Bedeli 50 milyon, sınırsız limit
+            { name: "Normal Kart", limit: 1000000, cost: 0 },
+            { name: "Üstün Kart", limit: 5000000, cost: 1000000 },
+            { name: "Elmas Kart", limit: 10000000, cost: 5000000 },
+            { name: "Amerikan Kart", limit: 25000000, cost: 10000000 },
+            { name: "Infinite Kart", limit: Infinity, cost: 50000000 }
         ];
 
         let cryptos = [
@@ -344,7 +345,6 @@
             { name: "MoonCoin (MOON)", price: 1200, min: 400, max: 3000 }
         ];
 
-        // Ev Türleri, Baz Fiyatları ve Saatlik Gelirleri (Seviye atladıkça artar)
         const houseTypes = [
             { name: "Normal Ev", baseCost: 50000, baseIncome: 1000 },
             { name: "Apartman", baseCost: 200000, baseIncome: 4500 },
@@ -381,39 +381,33 @@
             gameData.balance += amount;
             let limit = getCurrentLimit();
             if (!bypassLimit && gameData.balance > limit) {
-                gameData.balance = limit; // Kart limitini ASLA geçemez!
+                gameData.balance = limit;
             }
         }
 
         function handleClick() {
             let reward = clickLevels[gameData.clickLevel].reward;
             addBalance(reward);
-            updateUI();
+            renderAll();
         }
 
         function gameLoop() {
-            // Oyun saati mekaniği (Her saniye 15 dakika ilerler)
             gameData.gameTimeMinutes += 15;
             if (gameData.gameTimeMinutes >= 1440) {
                 gameData.gameTimeMinutes = 0;
             }
 
-            // Tam saat başı (dakika 0 olduğunda) Evler ve Şirketler saatlik kar öder
             if (gameData.gameTimeMinutes % 60 === 0) {
-                // Evlerin saatlik geliri
                 gameData.houseLevels.forEach((lvl, idx) => {
                     if (lvl > 0) {
                         let h = houseTypes[idx];
-                        let hourlyIncome = h.baseIncome * lvl; // Seviyeye göre katlanır
-                        addBalance(hourlyIncome);
+                        addBalance(h.baseIncome * lvl);
                     }
                 });
 
-                // Şirketlerin saatlik geliri
                 gameData.companies.forEach((count, idx) => {
                     if (count > 0) {
-                        let totalInc = companyTypes[idx].income * count;
-                        addBalance(totalInc);
+                        addBalance(companyTypes[idx].income * count);
                     }
                 });
             }
@@ -464,7 +458,7 @@
                         <strong>Seviye ${lvl.level} Tıklama</strong><br>
                         <small style="color: #38bdf8;">Tık Başı: ${lvl.reward}$</small>
                     </div>
-                    <button ${disabled ? "disabled style='background: #475569;'" : ""} onclick="buyClick(${idx})">${btnText}</button>
+                    <button ${disabled ? "disabled" : ""} onclick="buyClick(${idx})">${btnText}</button>
                 </div>`;
             });
             document.getElementById("click-upgrades-list").innerHTML = html;
@@ -483,7 +477,7 @@
             let html = "";
             creditCards.forEach((card, idx) => {
                 let isOwned = gameData.cardLevel >= idx;
-                let btnText = isOwned ? "Kullanılıyor" : `Satın Al (${card.cost.toLocaleString()}$)`;
+                let btnText = isOwned ? "Aktif / Sahipsin" : `Satın Al (${card.cost.toLocaleString()}$)`;
                 let disabled = isOwned || gameData.balance < card.cost;
                 let limitText = card.limit === Infinity ? "SINIRSIZ ∞" : card.limit.toLocaleString() + "$";
 
@@ -492,7 +486,7 @@
                         <strong>${card.name}</strong><br>
                         <small style="color: #38bdf8;">Limit: ${limitText}</small>
                     </div>
-                    <button ${disabled ? "disabled style='background: #475569;'" : ""} onclick="buyCard(${idx})">${btnText}</button>
+                    <button ${disabled ? "disabled" : ""} onclick="buyCard(${idx})">${btnText}</button>
                 </div>`;
             });
             document.getElementById("cards-list").innerHTML = html;
@@ -511,19 +505,19 @@
             let html = "";
             cryptos.forEach((c, idx) => {
                 let owned = gameData.cryptoOwned[idx];
+                let canBuy = gameData.balance >= c.price;
                 html += `<div class="item-card">
                     <div>
                         <strong>${c.name}</strong> (Adet: ${owned})<br>
                         <small style="color: #38bdf8;">Fiyat: ${c.price}$</small>
                     </div>
                     <div>
-                        <button onclick="buyCrypto(${idx})" style="background: #0284c7; margin-right: 5px;">Al</button>
-                        <button onclick="sellCrypto(${idx})" ${owned <= 0 ? "disabled style='background: #475569;'" : ""}>Sat</button>
+                        <button onclick="buyCrypto(${idx})" ${!canBuy ? "disabled" : ""} style="background: #0284c7; margin-right: 5px;">Al</button>
+                        <button onclick="sellCrypto(${idx})" ${owned <= 0 ? "disabled" : ""}>Sat</button>
                     </div>
                 </div>`;
             });
-            let el = document.getElementById("crypto-list");
-            if (el) el.innerHTML = html;
+            document.getElementById("crypto-list").innerHTML = html;
         }
 
         function buyCrypto(idx) {
@@ -552,4 +546,16 @@
                 let income = h.baseIncome * (currentLvl === 0 ? 1 : currentLvl);
                 let isMax = currentLvl >= 5;
 
-                let btnText = c
+                let btnText = currentLvl === 0 ? "Satın Al" : (isMax ? "Max Seviye" : `Seviye ${currentLvl + 1}'e Yükselt`);
+                let disabled = isMax || gameData.balance < cost;
+
+                html += `<div class="item-card">
+                    <div>
+                        <strong>${h.name}</strong> ${currentLvl > 0 ? `(Seviye ${currentLvl}/5)` : '(Sahip Değilsin)'}<br>
+                        <small style="color: #38bdf8;">Saatlik Kira: ${income.toLocaleString()}$</small><br>
+                        <small style="color: #22c55e;">Bedel: ${isMax ? '-' : cost.toLocaleString() + '$'}</small>
+                    </div>
+                    <button ${disabled ? "disabled" : ""} onclick="buyOrUpgradeHouse(${idx})">${btnText}</button>
+                </div>`;
+            });
+            document.getElementById("houses-list").innerH
